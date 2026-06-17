@@ -1,0 +1,190 @@
+{
+  "room_id": "883cbd22-1a3c-4ee0-bfe8-4984db4f82bc",
+  "brief": {
+    "product": "Career Coaching Based on multiple Intelligence",
+    "goal": "1000 orders and enquiries",
+    "budget_ceiling": 0.0,
+    "constraints": [
+      "Takes 45 min assessment"
+    ]
+  },
+  "strategies": [
+    {
+      "strategy_id": "strat-11bb03a3",
+      "author": "@StrategistA",
+      "archetype": "Go Viral",
+      "summary": "Revise the organic strategy by leveraging TikTok and Instagram Reels, with additional focus on LinkedIn for professional appeal. Target content towards emotional and contextual motivations, sharing real transformation stories with visual and kinaesthetic elements. Engage micro-influencers in career niches and utilize email and community building for sustained user engagement.",
+      "channel_mix": [
+        "TikTok",
+        "Instagram Reels",
+        "LinkedIn",
+        "Micro-influencer partnerships",
+        "Email marketing",
+        "Community building (Discord/Facebook groups)"
+      ],
+      "expected_outcome": "Achieve 400 initial orders and enquiries within the first 3 months, with a path to scale through increased community and influencer engagement.",
+      "cost_estimate": 0.0,
+      "risks": [
+        "Lower organic reach due to algorithm changes or content not resonating.",
+        "Micro-influencer content not converting as expected.",
+        "Lower conversion rates due to assessment length."
+      ],
+      "budget_split": [
+        "TikTok: Organic content creation, zero cash",
+        "Instagram Reels: Organic content creation, zero cash",
+        "LinkedIn: Organic posts and engagement, zero cash",
+        "Micro-influencer partnerships: Affiliate/rev-share, zero cash upfront",
+        "Email marketing: Leverage existing tools/platforms, zero cash",
+        "Community building: Organic growth, zero cash"
+      ],
+      "funnel_math": "TikTok & Instagram Reels=1 million organic views x 1% CTR = 10,000 visits; LinkedIn=Targeted posts = 5,000 visits; Micro-influencer partnerships=5,000 visits; Total visits=20,000 visits; Conversion rate=2% (more realistic for a 45-min assessment); Orders and enquiries=400",
+      "projected_result": "Achieve 400 orders and enquiries through organic channels, supplemented by active community engagement and influencer partnerships to gradually increase conversion rates.",
+      "feasible": true
+    },
+    {
+      "strategy_id": "strat-d462c14c",
+      "author": "@StrategistB",
+      "archetype": "Trust Play",
+      "summary": "Revised Trust Play strategy focusing on realistic organic growth through a mix of SEO, user-generated content (UGC), strategic partnerships, and an enhanced founder story to drive 1000 orders/enquiries over 12-18 months.",
+      "channel_mix": [
+        "SEO: Focus on long-tail keywords related to 'career coaching', 'multiple intelligence', and niches like 'creative professionals' or 'STEM students'. Boost content velocity with weekly blog posts featuring case studies and success stories.",
+        "Content Marketing: Produce long-form content (2000+ words) that answers common career questions and includes testimonials and real-world examples.",
+        "Partnerships: Develop partnerships with career-focused websites, educational institutions, and professional organizations. These partners can share content or offer co-hosted webinars.",
+        "Social Media & UGC: Encourage existing users to share their experiences through a social media hashtag campaign. Amplify these stories through email newsletters and featured blog posts.",
+        "Email Marketing: Create a nurture sequence that builds on user testimonials, founder stories, and educational content. Focus on value delivery and trust-building."
+      ],
+      "expected_outcome": "While the revised target is lower than the initial goal, it aligns with realistic organic growth expectations and provides a foundation for scaling.",
+      "cost_estimate": 0.0,
+      "risks": [
+        "Organic growth is inherently slower and heavily dependent on algorithm changes and partnership success. Conversion rates may vary based on content resonance and market saturation."
+      ],
+      "budget_split": [
+        "With a $0 budget, all tactics are organic. Leverage existing channels and networks to maximize reach without cash spend."
+      ],
+      "funnel_math": "organic_views=200000; CTR=1.5; visits=3000; conversion_rate=7; orders_enquiries=210",
+      "projected_result": "Achieve 210 orders/enquiries through organic reach and improved conversion tactics over 12-18 months.",
+      "feasible": true
+    },
+    {
+      "strategy_id": "strat-6ae1c7ea",
+      "author": "@StrategistC",
+      "archetype": "Paid Blitz",
+      "summary": "Leverage a multi-channel organic strategy focusing on neuro-targeted content, partnerships, and user-generated content to drive 1000 orders/inquiries over 6 months.",
+      "channel_mix": [
+        "SEO, email marketing, social media engagement, partnerships, user-generated content, testimonials."
+      ],
+      "expected_outcome": "Increased brand awareness and engagement through strategic content and partnerships, leading to gradual growth in inquiries and orders.",
+      "cost_estimate": 0.0,
+      "risks": [
+        "Lower than expected organic reach and engagement, competitive market landscape, reliance on organic algorithms."
+      ],
+      "budget_split": [
+        "$0 budget, entirely organic leveraging owned and earned media."
+      ],
+      "funnel_math": "100,000 organic views x 1.5% CTR = 1,500 visits x 10% CVR = 150 orders/inquiries.",
+      "projected_result": "150 orders/inquiries, short by 850 from the goal of 1,000.",
+      "feasible": true
+    }
+  ],
+  "debate": [
+    {
+      "critique": {
+        "author": "@StrategistA",
+        "target_strategy_id": "strat-d462c14c",
+        "claim": "The proposed funnel math of 500k organic views x 2% CTR = 10k visits x 10% conversion rate = 1,000 orders and enquiries is overly optimistic. Achieving 500k organic views solely through SEO, long-form content, and partnerships within 6-12 months without any paid promotion is highly ambitious. Organic SEO traffic growth at zero budget typically requires more time to reach such high view counts, especially for a niche product like career coaching. A more realistic organic reach might be closer to 100k views, which at the same conversion rates would result in only 200 orders and enquiries (100k x 2% CTR = 2k visits x 10% CVR = 200 orders/enquiries).",
+        "severity": 4
+      },
+      "rebuttal": "The challenger's math is indeed realistic for a 6-12 month timeline without any paid promotion. To address this, I'll adjust the funnel to a more attainable target: 250k organic views x 2% CTR = 5k visits x 10% conversion rate = 500 orders and enquiries. This accounts for the slower organic ramp-up but still leverages aggressive SEO tactics, strategic partnerships, and high-velocity content creation to drive significant traffic within the niche."
+    },
+    {
+      "critique": {
+        "author": "@StrategistA",
+        "target_strategy_id": "strat-6ae1c7ea",
+        "claim": "The funnel math assumes a 3% CTR from organic views, which is high for a zero-budget campaign relying on SEO and social media engagement without paid promotion. Even if we achieve 50,000 organic views, a more realistic CTR is around 1.5%, leading to 750 visits, not 1,500. With a 5% CVR, this results in only 37.5 orders/inquiries, not 75, falling short by 962.5 from the goal of 1,000.",
+        "severity": 4
+      },
+      "rebuttal": "The challenger is correct in identifying the gap with the current funnel math given a realistic 1.5% CTR for organic views. To address this shortfall, we'll enhance our approach by increasing the volume of views through strategic partnerships and active community engagement. Let's target 100,000 organic views with the adjusted 1.5% CTR, leading to 1,500 visits. At a 5% conversion rate, this yields 75 orders/inquiries. To bridge the remaining gap, we'll also focus on boosting conversion rates through persuasive storytelling and testimonials, pushing toward a 6.7% CVR, which would yield approximately 100 orders/inquiries, totaling 150\u2014while continuing to optimize and expand reach to hit the goal."
+    },
+    {
+      "critique": {
+        "author": "@StrategistB",
+        "target_strategy_id": "strat-11bb03a3",
+        "claim": "StrategistA's funnel math assumes a 3% profile click-through rate (CTR) from 1 million organic views, which is overly optimistic for TikTok and Instagram without any paid promotion or existing large follower base. Typical organic CTR ranges from 0.5% to 1% for average reach, especially without a strong call to action or established brand presence. This would result in only 5,000 to 10,000 visits, not 30,000. At a 5% conversion rate, this translates to 250 to 500 orders and enquiries, far short of the 1,500 projected and the 1,000 goal.",
+        "severity": 4
+      },
+      "rebuttal": "You're right about typical organic CTRs, but my plan includes a strong call-to-action and emotionally resonant stories tailored to the specific audience's motivations, which can elevate CTR to 2% \u2014 resulting in 20,000 visits. At a 5% conversion rate, this equals 1,000 orders and enquiries, meeting the goal."
+    },
+    {
+      "critique": {
+        "author": "@StrategistB",
+        "target_strategy_id": "strat-6ae1c7ea",
+        "claim": "The plan assumes a 3% CTR and a 5% CVR on organic views, which are high without ad spend or established brand presence. Industry organic CTR averages are closer to 1-2%, making the expected 1,500 visits overly optimistic. Realistically, 50,000 views x 1.5% CTR = 750 visits x 5% CVR = 37.5 orders/inquiries, short by 962.5.",
+        "severity": 4
+      },
+      "rebuttal": "You\u2019re right about industry averages, but our strategy relies on highly-targeted, neuro-optimized content that typically exceeds average performance. However, I concede the point on CTR; revising to a 2% CTR, we expect 50,000 views x 2% = 1,000 visits. With a 5% CVR, that yields 50 orders/inquiries, creating a gap of 950. We will need to enhance content virality and partnership reach to bridge this."
+    },
+    {
+      "critique": {
+        "author": "@StrategistC",
+        "target_strategy_id": "strat-11bb03a3",
+        "claim": "The funnel math relies on a 5% conversion rate from visits to orders/enquiries, which is unrealistically high for a service requiring a 45-minute assessment. Typical conversion rates for such detailed processes are closer to 1-2%, making the expected orders and enquiries around 300-600, falling short of the 1,000 goal.",
+        "severity": 4
+      },
+      "rebuttal": "The challenger's point about the typical conversion rates for detailed processes is valid. Given the 45-minute assessment requirement, expecting a 5% conversion rate might be overly optimistic. Adjusting to a more realistic 2% conversion rate, the funnel would yield approximately 600 orders and enquiries from 30k visits. To bridge the gap to 1,000, we need to increase organic reach by generating 1.67 million views instead of 1 million, maintaining the 3% profile click rate."
+    },
+    {
+      "critique": {
+        "author": "@StrategistC",
+        "target_strategy_id": "strat-d462c14c",
+        "claim": "The plan assumes a 2% CTR on organic content and a 10% conversion rate from visits to orders/enquiries. For a zero-budget, organic strategy, these rates are optimistic. Typical organic CTR is closer to 1%, and a realistic conversion rate would be around 2-5%. Recomputing with 1% CTR and 5% CVR: 500k views x 1% CTR = 5k visits x 5% CVR = 250 orders/enquiries, which is only 25% of the goal.",
+        "severity": 4
+      },
+      "rebuttal": "The challenger's math is accurate given typical organic benchmarks, but our strategy targets a highly motivated audience with niche-specific content, aiming to exceed those averages. By leveraging personalized, story-driven content and strategic partnerships, we expect to drive a 2% CTR and a 10% conversion rate. However, to be cautious, adjusting for a more conservative scenario: if we achieve a 1.5% CTR and a 7% CVR, we'd reach 525 orders/enquiries. We can close this gap through increased content volume and optimizing conversion paths, aiming for 1 million views instead of 500k over a longer timeline."
+    }
+  ],
+  "scores": [
+    {
+      "strategy_id": "strat-11bb03a3",
+      "total": 7.7,
+      "dimensions": {
+        "reach": 8,
+        "cost_efficiency": 10,
+        "speed": 7,
+        "risk": 5,
+        "durability": 8
+      }
+    },
+    {
+      "strategy_id": "strat-d462c14c",
+      "total": 6.7,
+      "dimensions": {
+        "reach": 6,
+        "cost_efficiency": 10,
+        "speed": 4,
+        "risk": 5,
+        "durability": 8
+      }
+    },
+    {
+      "strategy_id": "strat-6ae1c7ea",
+      "total": 6.0,
+      "dimensions": {
+        "reach": 4,
+        "cost_efficiency": 10,
+        "speed": 5,
+        "risk": 4,
+        "durability": 6
+      }
+    }
+  ],
+  "recommendation": "The decisive recommendation is to select \"Go Viral\" (strat-11bb03a3) as the single winner. This strategy stands out with a score of 7.7, which is the highest among the options. The funnel math projects 20,000 visits with a 2% conversion rate, resulting in 400 orders and enquiries. Although this falls short of the 1,000 goal, the plan's feasibility in leveraging the viral potential of TikTok and Instagram Reels, along with micro-influencer partnerships, provides a robust framework for scaling reach and engagement.\n\nThe critical debate point that settled this decision was the realistic adjustment of the conversion rate to 2%, given the 45-minute assessment requirement, which aligns better with industry standards. This adjustment depicts a more pragmatic approach to achieving the projected results. Furthermore, the strategy's focus on emotional storytelling and community building is designed to enhance engagement and conversion rates over time, thus offering scalability and sustainability.\n\nRejecting \"Trust Play\" (strat-d462c14c) and \"Paid Blitz\" (strat-6ae1c7ea) is based on their inability to realistically meet the projected goals without exceeding the budget. The \"Trust Play\" strategy, despite its strong foundation in SEO and UGC, falls significantly short in terms of initial reach and scalability within the zero-budget constraint. Similarly, \"Paid Blitz\" underestimates the conversion challenges associated with relying solely on organic channels without substantial initial visibility.\n\nThe single most important reason for selecting \"Go Viral\" is its potential to rapidly increase brand awareness and user engagement through high-impact social media platforms, which are essential for achieving significant growth in a cost-effective manner.",
+  "decision": {
+    "chosen_strategy_id": "strat-11bb03a3",
+    "is_hybrid": false,
+    "rationale": "Approved via WarRoom UI",
+    "human_approver": "mak",
+    "timestamp": "2026-06-17T04:37:59.500349+00:00"
+  },
+  "sealed_at": "2026-06-17T04:37:59.500853+00:00",
+  "sealed_hash": "1d648cbb20b3989eec8518114e9a065426fb244dcd89c7974cde72ec03f16286"
+}

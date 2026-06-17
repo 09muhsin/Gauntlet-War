@@ -1,0 +1,20 @@
+# ---- Gauntlet War — Python dependencies ----
+
+# Coordination layer
+# band-sdk            # TODO: confirm the exact package name in the Band "SDK Setup" guide,
+#                     # then pin a version. Until then band_client.py falls back to raw HTTP.
+
+# Orchestration & agents
+langgraph>=0.2.0       # Conductor phase control
+crewai>=0.80.0         # Strategist agents
+
+# Model access (both AI/ML API and Featherless are OpenAI-compatible endpoints)
+openai>=1.40.0
+requests>=2.31.0
+
+# Schemas / config
+pydantic>=2.6.0
+python-dotenv>=1.0.0
+
+# Frontend
+streamlit>=1.36.0
