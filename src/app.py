@@ -11,6 +11,14 @@ Two modes:
 """
 from __future__ import annotations
 
+import os
+import sys
+
+# Ensure the repo root is importable so `from src import ...` works regardless of
+# how the app is launched (locally or on Streamlit Cloud, where the main file's
+# own directory — not the repo root — is what gets put on sys.path).
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import streamlit as st
 
 from src import demo, ui
