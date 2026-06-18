@@ -1,28 +1,30 @@
 # ⚔️ Gauntlet War
 
-**Rival AI agents run marketing strategies through a gauntlet of debate and scoring — one survives, and a human seals it.**
+**Rival AI agents draft 3 competing marketing plans, *self-improve under fire*, and ship the deliverables — all inside one Band room.**
 
 Built for the [Band of Agents Hackathon](https://lablab.ai/ai-hackathons/band-of-agents-hackathon) (June 12–19, 2026) · Track 1: Internal Enterprise Workflows.
 
-Most multi-agent submissions debate a *single fixed input* (one claim, one contract). Gauntlet War is different: three strategist agents each **author a complete, competing marketing plan**, defend it in a live Band room, and a separate scorer + the Conductor drive to a winner that a human seals into a tamper-evident audit record.
+The field is full of "agents debate one fixed input → human approves → audit sealed." Gauntlet War is different on three axes: **(1)** three strategist agents each **author a complete, competing marketing plan** (the alternatives are generated, not handed in); **(2)** after the debate, each strategist publishes a **v2 that fixes its critiques** — the contest *causes* better plans; **(3)** the winning plan drops out as three **production-ready deliverables** (founder proposal + operating execution plan + ready-to-ship content kit), polished by a neuro-marketing copy engine. The whole run lives inside one Band room and seals as a SHA-256 hash posted into the transcript.
 
 ---
 
 ## How it works (Act 0 — Strategy Showdown)
 
 1. A human submits a brief — product, goal, budget ceiling, constraints.
-2. **@Conductor** opens a Band room and **recruits** the agents via discovery.
-3. **@StrategistA/B/C** each author a complete plan, locked to a distinct archetype — **Go Viral**, **Trust Play**, **Paid Blitz**.
-4. Strategists critique each other via @mentions; every challenge gets a rebuttal.
-5. **@Scorer** (independent) rates each plan 1–10 on five weighted dimensions → ranked table.
-6. @Conductor synthesizes a winner or hybrid with cited reasons.
-7. The human approves → **Band seals** the brief, plans, debate, scores, and choice.
+2. **@Conductor** opens a Band room and adds the four agents through Band's add-participant API (not hardcoded — recruiting goes through Band).
+3. **@StrategistA/B/C** each author a complete plan, locked to a distinct archetype — **Go Viral**, **Trust Play**, **Paid Blitz** — with explicit funnel math and an honest `feasible` flag.
+4. Strategists challenge each other's *numbers* via @mentions; every challenge gets a rebuttal.
+5. **REFINE** — each strategist publishes a **v2 plan** that fixes the critiques against it (same archetype, tightened math). The original move most adversarial submissions skip.
+6. **@Scorer** (independent, on Featherless) rates each v2 plan 1–10 on five weighted dimensions → ranked table.
+7. @Conductor synthesizes a winner or hybrid, citing the score AND the debate point that settled it.
+8. The human approves → bundle is **SHA-256-hashed and the hash is posted into the Band room** as the final message; the same bundle is written to `audit/<room_id>.json`. The transcript itself is the audit; the hash makes the off-Band record tamper-evident.
+9. **SHIP** — the winning plan becomes a proposal + execution plan + content kit through a `think → draft → creative-director polish → cliché scrub` copy engine. Files land in `deliverables/<room_id>/`.
 
 ## Stack
 
 | Layer | Tech |
 |---|---|
-| Coordination | **Band** (rooms, discovery, @mention routing, audit seal) |
+| Coordination | **Band** — rooms, multi-agent participants, @mention routing, transcript-as-audit |
 | Orchestration | **LangGraph** (Conductor phase control) |
 | Strategist agents | **CrewAI** |
 | Reasoning models | **AI/ML API** (Conductor + Strategists) |
@@ -97,7 +99,7 @@ gauntlet-war/
 └─ deliverables/           # generated artifacts (gitignored)
 ```
 
-> ⚠️ **Before anything else:** `src/band_client.py` is written against a plausible REST shape with `TODO` markers. Confirm each endpoint against the Band Agent API / SDK docs on Day 1 — the `day1_two_agent_room.py` smoke test is how you verify it.
+> ⚠️ **Run the smoke test first.** `python -m scripts.day1_two_agent_room` proves the Band wiring (create chat → add participant → 2 messages → list) before you spend AI/ML credits on the full gauntlet. 401 = wrong api_key · 403 = quota/permission · 422 = mention/participant problem.
 
 ## License
 

@@ -15,6 +15,7 @@ Hard rules baked in here (from the docs):
 """
 from __future__ import annotations
 
+from threading import Lock
 from typing import Any, Optional
 
 import requests
@@ -33,6 +34,11 @@ class BandClient:
         self._http.headers.update(
             {"X-API-Key": creds.api_key, "Content-Type": "application/json"}
         )
+        # requests.Session is NOT thread-safe; serialize HTTP per agent so the gauntlet's
+        # parallel phases (3 strategists authoring concurrently, 6 critique chains, etc.)
+        # cannot corrupt this agent's session. Different agents stay fully parallel because
+        # each owns its own Session + Lock.
+        self._lock = Lock()
 
     @property
     def handle(self) -> str:
@@ -54,7 +60,8 @@ class BandClient:
         last_err: Exception | None = None
         for attempt in range(_tries):
             try:
-                resp = self._http.post(self._url(path), json=payload, timeout=30)
+                with self._lock:
+                    resp = self._http.post(self._url(path), json=payload, timeout=30)
                 if not resp.ok:
                     raise RuntimeError(f"Band POST {path} -> {resp.status_code}: {resp.text}")
                 return resp.json() if resp.content else {}
@@ -84,7 +91,8 @@ class BandClient:
         )
 
     def list_messages(self, chat_id: str) -> list[dict[str, Any]]:
-        resp = self._http.get(self._url(f"/chats/{chat_id}/messages"), timeout=30)
+        with self._lock:
+            resp = self._http.get(self._url(f"/chats/{chat_id}/messages"), timeout=30)
         resp.raise_for_status()
         body = resp.json() if resp.content else {}
         return body.get("data") or body.get("messages") or []

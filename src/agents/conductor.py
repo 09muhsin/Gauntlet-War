@@ -27,6 +27,7 @@ from ..knowledge import (
     scrub_banned,
 )
 from ..models import ModelRouter
+from ..parallel import pmap
 from ..schemas import Brief, Decision, Score, Strategy
 from .scorer import Scorer
 from .strategist import Strategist
@@ -54,7 +55,7 @@ class Conductor:
         self._refine_passes = refine_passes
 
     def run(self, brief: Brief) -> dict:
-        # Phase 0 — open room + recruit participants (discovery in the core build, PRD §5.6)
+        # Phase 0 — open room + recruit participants (Band's add-participant API).
         room_id = self.band.create_chat(title=f"Gauntlet War: {brief.product}")
         for member in self._members():
             self.band.add_participant(room_id, member.band.agent_id)
@@ -67,15 +68,9 @@ class Conductor:
             mentions=everyone,
         )
 
-        # Phase 1 — author (each strategist posts its own plan, mentioning the Conductor)
-        strategies: list[Strategy] = []
-        plan_of: dict[str, Strategist] = {}
-        my_plan: dict[str, Strategy] = {}
-        for s in self._strategists:
+        # Phase 1 — AUTHOR (3 strategists in parallel; each posts AS ITSELF).
+        def _author(s: Strategist) -> Strategy:
             plan = s.author(brief)
-            strategies.append(plan)
-            plan_of[plan.strategy_id] = s
-            my_plan[s.label] = plan
             feas = "" if plan.feasible else " ⚠️ NOT feasible in this budget"
             s.band.post(
                 room_id,
@@ -84,47 +79,69 @@ class Conductor:
                 f"Projection: {plan.projected_result} | Est. cost: ${plan.cost_estimate:,.0f}",
                 mentions=[self.band.mention()],
             )
+            return plan
 
-        # Phase 2 — debate (every direct @mention challenge gets a rebuttal)
+        strategies: list[Strategy] = pmap(_author, self._strategists)
+        plan_of: dict[str, Strategist] = {
+            p.strategy_id: s for p, s in zip(strategies, self._strategists)
+        }
+        my_plan: dict[str, Strategy] = {s.label: p for p, s in zip(strategies, self._strategists)}
+
+        # Phase 2 — DEBATE (every cross-pair runs concurrently; each chain stays critique→rebuttal).
         debate_log: list[dict] = []
         crits_against: dict[str, list] = {p.strategy_id: [] for p in strategies}
-        for _ in range(self._max_rounds):
-            for challenger in self._strategists:
-                mine = my_plan[challenger.label]
-                for rival_plan in strategies:
-                    if rival_plan.author == challenger.label:
-                        continue
-                    defender = plan_of[rival_plan.strategy_id]
-                    crit = challenger.critique(brief, mine, rival_plan)
-                    crits_against[rival_plan.strategy_id].append(crit)
-                    challenger.band.post(room_id, crit.claim, mentions=[defender.band.mention()])
-                    rebuttal = defender.rebut(brief, rival_plan, crit)
-                    defender.band.post(room_id, rebuttal, mentions=[challenger.band.mention()])
-                    debate_log.append({"critique": crit.model_dump(), "rebuttal": rebuttal})
 
-        # Phase 2.5 — SELF-IMPROVEMENT: each strategist revises its plan to fix the critiques.
-        # This is what makes the system auto-refining — v2 plans visibly answer the debate.
+        def _chain(args: tuple[Strategist, Strategist, Strategy]) -> dict:
+            challenger, defender, rival_plan = args
+            mine = my_plan[challenger.label]
+            crit = challenger.critique(brief, mine, rival_plan)
+            challenger.band.post(room_id, crit.claim, mentions=[defender.band.mention()])
+            rebuttal = defender.rebut(brief, rival_plan, crit)
+            defender.band.post(room_id, rebuttal, mentions=[challenger.band.mention()])
+            return {"critique": crit, "rebuttal": rebuttal}
+
+        for _ in range(self._max_rounds):
+            pairs = [
+                (challenger, plan_of[rival.strategy_id], rival)
+                for challenger in self._strategists
+                for rival in strategies
+                if rival.author != challenger.label
+            ]
+            results = pmap(_chain, pairs)
+            for r in results:
+                crit = r["critique"]
+                crits_against[crit.target_strategy_id].append(crit)
+                debate_log.append({"critique": crit.model_dump(), "rebuttal": r["rebuttal"]})
+
+        # Snapshot v1 BEFORE refinement so the UI can show the v1→v2 progression.
+        plans_v1 = [my_plan[s.label] for s in self._strategists]
+
+        # Phase 2.5 — REFINE (3 strategists self-improving in parallel; v2 visibly answers debate).
+        def _refine(s: Strategist) -> Strategy:
+            plan = my_plan[s.label]
+            improved = s.refine(brief, plan, crits_against.get(plan.strategy_id, []))
+            feas = "" if improved.feasible else " ⚠️ still not feasible"
+            s.band.post(
+                room_id,
+                f"Revised plan v2 ({improved.archetype.value}){feas}: {improved.summary}\n"
+                f"Funnel: {improved.funnel_math}\nProjection: {improved.projected_result}",
+                mentions=[self.band.mention()],
+            )
+            return improved
+
         for _ in range(self._refine_passes):
-            for s in self._strategists:
-                plan = my_plan[s.label]
-                improved = s.refine(brief, plan, crits_against.get(plan.strategy_id, []))
-                my_plan[s.label] = improved
-                feas = "" if improved.feasible else " ⚠️ still not feasible"
-                s.band.post(
-                    room_id,
-                    f"Revised plan v2 ({improved.archetype.value}){feas}: {improved.summary}\n"
-                    f"Funnel: {improved.funnel_math}\nProjection: {improved.projected_result}",
-                    mentions=[self.band.mention()],
-                )
+            refined = pmap(_refine, self._strategists)
+            for s, plan in zip(self._strategists, refined):
+                my_plan[s.label] = plan
             strategies = [my_plan[s.label] for s in self._strategists]
 
-        # Phase 3 — score the (refined) plans; independent Scorer posts the ranked table
+        # Phase 3 — SCORE the refined plans (scorer parallelizes internally).
         ranked: list[Score] = self._scorer.ranked_table(strategies)
         self._scorer.band.post(
             room_id, _format_table(ranked, strategies), mentions=[self.band.mention()]
         )
 
-        # Phase 4 — synthesize recommendation + human gate
+        # Phase 4 — synthesize recommendation + open the human gate.
         recommendation = self._synthesize(strategies, ranked, debate_log)
         self.band.post(room_id, recommendation, mentions=everyone)
         self.band.post(
@@ -137,6 +154,7 @@ class Conductor:
             "room_id": room_id,
             "brief": brief.model_dump(),
             "strategies": [s.model_dump() for s in strategies],
+            "strategies_v1": [s.model_dump() for s in plans_v1],
             "debate": debate_log,
             "scores": [{"strategy_id": s.strategy_id, "total": s.weighted_total,
                         "dimensions": s.dimensions.model_dump()} for s in ranked],
@@ -183,11 +201,15 @@ class Conductor:
         strategist = next(s for s in self._strategists if s.label == winner.author)
         brief = Brief(**bundle["brief"])
 
-        artifacts = {
-            "execution_plan": strategist.execution_plan(brief, winner),
-            "content_kit": strategist.content_kit(brief, winner),
-            "proposal": self._proposal(brief, winner, bundle),
-        }
+        # Three deliverables run concurrently — each is ~6 LLM calls (think + draft + polish + scrub),
+        # so this cuts the post-approval wait from ~90s to ~30s without changing the token spend.
+        jobs = [
+            ("execution_plan", lambda: strategist.execution_plan(brief, winner)),
+            ("content_kit",    lambda: strategist.content_kit(brief, winner)),
+            ("proposal",       lambda: self._proposal(brief, winner, bundle)),
+        ]
+        results = pmap(lambda j: j[1](), jobs)
+        artifacts = dict(zip([j[0] for j in jobs], results))
 
         out_dir = DELIVERABLES_DIR / room_id
         out_dir.mkdir(parents=True, exist_ok=True)

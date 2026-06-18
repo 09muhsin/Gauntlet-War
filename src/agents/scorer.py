@@ -9,6 +9,7 @@ from __future__ import annotations
 from ..band_client import BandClient
 from ..knowledge import MARKETING_DOCTRINE
 from ..models import ModelRouter
+from ..parallel import pmap
 from ..schemas import DimensionScore, Score, Strategy
 
 _SYSTEM = (
@@ -44,5 +45,5 @@ class Scorer:
         return Score(strategy_id=strategy.strategy_id, dimensions=DimensionScore(**data))
 
     def ranked_table(self, strategies: list[Strategy]) -> list[Score]:
-        scores = [self.score(s) for s in strategies]
+        scores = pmap(self.score, strategies)
         return sorted(scores, key=lambda s: s.weighted_total, reverse=True)
