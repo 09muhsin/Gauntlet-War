@@ -21,6 +21,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import streamlit as st
 
+import hmac
+
 from src import demo, ui
 from src.config import load_settings
 from src.schemas import Brief, Decision
@@ -33,6 +35,43 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 st.markdown(ui.inject_theme(), unsafe_allow_html=True)
+
+
+# ── Access gate ──────────────────────────────────────────────────────────────
+def _check_password() -> bool:
+    """Gate the app behind a shared password set via APP_PASSWORD (secrets / .env).
+
+    If APP_PASSWORD is unset the app stays open — handy for local dev. On the public
+    Streamlit deployment, set it in Secrets so only people with the password (e.g.
+    judges) can reach the live, billable controls.
+    """
+    expected = os.getenv("APP_PASSWORD", "").strip()
+    if not expected:
+        return True  # no password configured → open
+    if st.session_state.get("auth_ok"):
+        return True
+
+    st.markdown(
+        '<div style="max-width: 24rem; margin: 5rem auto 1.5rem; text-align: center; '
+        'font-family: Fraunces, serif; font-style: italic; font-size: 2rem;">Gauntlet War</div>'
+        '<div style="max-width: 24rem; margin: 0 auto 1.5rem; text-align: center; '
+        'color: #6e7889; font-size: 0.85rem;">Enter the access password to continue.</div>',
+        unsafe_allow_html=True,
+    )
+    _l, mid, _r = st.columns([1, 2, 1])
+    with mid:
+        pw = st.text_input("Password", type="password", label_visibility="collapsed")
+        if pw:
+            if hmac.compare_digest(pw, expected):
+                st.session_state.auth_ok = True
+                st.rerun()
+            else:
+                st.error("Incorrect password.")
+    return False
+
+
+if not _check_password():
+    st.stop()
 
 settings = load_settings()
 missing = settings.missing_agents()
