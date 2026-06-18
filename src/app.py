@@ -119,7 +119,10 @@ with st.sidebar:
     else:
         if not can_live:
             st.warning(
-                "Live needs Band creds + an AI/ML key in `.env`. Demo mode runs sealed records."
+                "**Live is locked.** It needs all 5 Band agents + an AI/ML key.\n\n"
+                "• **Local:** fill them in `.env`\n"
+                "• **Deployed:** add them in **Manage app → Settings → Secrets**\n\n"
+                "Demo mode replays sealed runs with zero API calls."
             )
         product = st.text_input("Product", "$120 premium running shoe")
         goal = st.text_input("Goal", "1,000 first-month orders")
